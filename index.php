@@ -42,7 +42,7 @@
 		var sessionTolen = "";
 		var apiKey = 'nyUl7wzXoKtgoHnd2fB0uRrAv0dDyLC+b4Y6xngpJDY=';
 		var secret = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9qZWN0IjoieW9kYV9jaGF0Ym90X2VuIn0.anf_eerFhoNq6J8b36_qbD4VqngX79-yyBKWih_eA1-HyaMe2skiJXkRNpyWxpjmpySYWzPGncwvlwz5ZRE7eg';
-
+		var countNoResult = 0;
 
 		function checkChat(){
 			if($.trim($("#chat").val()) !== ""){
@@ -182,12 +182,45 @@
 					 dataType: 'json',
 					 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 					 success:function(data){
-						 saveSession(0,data.answers[0].messageList[0]);
-						 $("#conversacion ul").append("<li><b>Yoda:</b> "+data.answers[0].messageList[0]+"</li>");
-						 $("#writing").hide();
-						 $("#chat").val("");
-						 console.log(data);
-						 //data.answers[0].flags[0]="no-results";
+
+						 //Hay que mostrar toda la lista de mensajes
+						 (data.answers[0].flags[0]=="no-results"?countNoResult++:countNoResult=0);
+						 console.log(countNoResult);
+						 if(countNoResult>=2){
+							 starWarsCharacters();
+						 }
+						 else{
+							 saveSession(0,data.answers[0].messageList[0]);
+							 $("#conversacion ul").append("<li><b>Yoda:</b> "+data.answers[0].messageList[0]+"</li>");
+							 $("#writing").hide();
+							 $("#chat").val("");
+						 }
+					 },
+					 error:function(xhr,status,error){
+								console.log(status);
+							 console.log(error);
+					}
+				});
+			}
+
+			function starWarsCharacters(){
+				$.ajax({
+					 type:'GET',
+					 url: 'https://swapi.co/api/people/',
+					 dataType: 'json',
+					 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+					 success:function(data){
+						 if(data.results){
+							 var text = "I haven't found any results, but here is a list of some Star Wars characters:<br/><ul>";
+							 $.each(data.results, function(key, value){
+								 console.log(value.name);
+								 text += "<li>"+value.name+"</li>";
+							 });
+							 text += "</ul>";
+							 saveSession(0,text);
+							 $("#conversacion ul").append("<li>"+text+"</li>");
+						 }
+
 					 },
 					 error:function(xhr,status,error){
 								console.log(status);
