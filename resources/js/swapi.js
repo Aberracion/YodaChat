@@ -1,3 +1,6 @@
+/**
+  Consult the star wars characters and show in the conversation
+*/
 function starWarsCharacters(){
   ajax(
     'GET',
@@ -23,6 +26,10 @@ function starWarsCharacters(){
   });
 }
 
+
+/**
+  Consult the star wars films and show in the conversation
+*/
 function starWarsFilms(){
   ajax(
     'GET',

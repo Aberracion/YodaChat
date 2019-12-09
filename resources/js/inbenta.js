@@ -1,3 +1,6 @@
+/**
+  Make the autorization for the conversation.
+*/
 function Authorization(){
   ajax(
     'POST',
@@ -21,7 +24,10 @@ function Authorization(){
 
 }
 
-/*function getApiUrl(){
+/*
+  We don't use this function
+
+function getApiUrl(){
   $.ajax({
      type:'GET',
      url: 'https://api.inbenta.io/v1/apis',
@@ -44,6 +50,10 @@ function Authorization(){
   });
 }*/
 
+
+/**
+  Init the conversation
+*/
 function iniConversation(){
   ajax(
     'POST',
@@ -62,6 +72,9 @@ function iniConversation(){
   });
 }
 
+/**
+  Send the message a Inbenta Chat Bot and show the response
+*/
 function sendMessage(){
   ajax(
     'POST',
