@@ -4,8 +4,8 @@
 	</head>
 	<body>
 
-		<div id="conversacion">
-			<ul>
+		<div >
+			<ul id="conversacion">
 				<?php
 					session_start();
 					if(isset($_SESSION['conversation']))
@@ -78,18 +78,27 @@
 
 		$(function() {
 			$("#submit").click(function(){
-				$("#conversacion ul").append("<li><b>Me:</b> "+$("#chat").val()+"</li>");
+				$("#conversacion").append("<li><b>Me:</b> "+$("#chat").val()+"</li>");
 				$("#writing").show();
 				saveSession(1,$("#chat").val());
-				if(accessToken === ""){
-					Authorization();
-				}
-				else if(sessionToken === ""){
-					iniConversation();
+
+				if($("#chat").val().indexOf('force') >= 0)
+				{
+					starWarsFilms();
 				}
 				else{
-					sendMessage();
+					if(accessToken === ""){
+						Authorization();
+					}
+					else if(sessionToken === ""){
+						iniConversation();
+					}
+					else{
+						sendMessage();
+					}
 				}
+
+
 
 
 				$("#submit").prop("disabled",true);
@@ -191,7 +200,7 @@
 						 }
 						 else{
 							 saveSession(0,data.answers[0].messageList[0]);
-							 $("#conversacion ul").append("<li><b>Yoda:</b> "+data.answers[0].messageList[0]+"</li>");
+							 $("#conversacion").append("<li><b>Yoda:</b> "+data.answers[0].messageList[0]+"</li>");
 							 $("#writing").hide();
 							 $("#chat").val("");
 						 }
@@ -218,7 +227,37 @@
 							 });
 							 text += "</ul>";
 							 saveSession(0,text);
-							 $("#conversacion ul").append("<li>"+text+"</li>");
+							 $("#conversacion").append("<li>"+text+"</li>");
+							 $("#writing").hide();
+							 $("#chat").val("");
+						 }
+
+					 },
+					 error:function(xhr,status,error){
+								console.log(status);
+							 console.log(error);
+					}
+				});
+			}
+
+			function starWarsFilms(){
+				$.ajax({
+					 type:'GET',
+					 url: 'https://swapi.co/api/films/',
+					 dataType: 'json',
+					 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+					 success:function(data){
+						 if(data.results){
+							 var text = "The <b>force</b> is in this movies:<br/><ul>";
+							 $.each(data.results, function(key, value){
+								 console.log(value.title);
+								 text += "<li>"+value.title+"</li>";
+							 });
+							 text += "</ul>";
+							 saveSession(0,text);
+							 $("#conversacion").append("<li>"+text+"</li>");
+							 $("#writing").hide();
+							 $("#chat").val("");
 						 }
 
 					 },
