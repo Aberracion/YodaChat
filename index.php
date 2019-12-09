@@ -3,9 +3,25 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	</head>
 	<body>
+
 		<div id="conversacion">
 			<ul>
+				<?php
+					session_start();
+					if(isset($_SESSION['conversation']))
+					{
+						$conversation = $_SESSION['conversation'];
+						foreach($conversation as $message){
+							if($message['user'] == 1){
+								echo "<li><b>Me:</b> ".$message["text"]."</li>";
+							}
+							else {
+								echo "<li><b>Yoda:</b> ".$message["text"]."</li>";
+							}
+						}
+					}
 
+				 ?>
 			</ul>
 		</div>
 		<div style="display:none" id="writing">Writing...</div>
@@ -64,6 +80,7 @@
 			$("#submit").click(function(){
 				$("#conversacion ul").append("<li><b>Me:</b> "+$("#chat").val()+"</li>");
 				$("#writing").show();
+				saveSession(1,$("#chat").val());
 				if(accessToken === ""){
 					Authorization();
 				}
@@ -165,6 +182,7 @@
 					 dataType: 'json',
 					 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 					 success:function(data){
+						 saveSession(0,data.answers[0].messageList[0]);
 						 $("#conversacion ul").append("<li><b>Yoda:</b> "+data.answers[0].messageList[0]+"</li>");
 						 $("#writing").hide();
 						 $("#chat").val("");
@@ -173,6 +191,24 @@
 					 },
 					 error:function(xhr,status,error){
 								console.log(status);
+							 console.log(error);
+					}
+				});
+			}
+
+			function saveSession(user, text){
+				$.ajax({
+					 type:'POST',
+					 url: './saveSession.php',
+					 data:{
+						 "user" : user,
+						 "text" : text
+					 },
+					 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+					 success:function(data){
+						 console.log("OK");
+					 },
+					 error:function(xhr,status,error){
 							 console.log(error);
 					}
 				});
