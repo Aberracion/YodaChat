@@ -17,7 +17,6 @@ function Authorization(){
     expiration = data.expiration;
     chatbotApiUrl = data.apis.chatbot;
     expires_in = data.expires_in;
-    console.log(expires_in);
     setTimeout("accessToken = '';", expires_in*1000);
     iniConversation();
   }).catch(error => {
@@ -92,7 +91,6 @@ function sendMessage(){
     'json'
   ).then(data => {
     (data.answers[0].flags[0]=="no-results"?countNoResult++:countNoResult=0);
-    console.log(countNoResult);
     if(countNoResult>=2){
       starWarsCharacters();
     }

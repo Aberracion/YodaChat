@@ -12,7 +12,6 @@ function starWarsCharacters(){
     if(data.results){
       var text = "I haven't found any results, but here is a list of some Star Wars characters:<br/><ul>";
       $.each(data.results, function(key, value){
-        console.log(value.name);
         text += "<li>"+value.name+"</li>";
       });
       text += "</ul>";
@@ -41,7 +40,6 @@ function starWarsFilms(){
     if(data.results){
       var text = "The <b>force</b> is in this movies:<br/><ul>";
       $.each(data.results, function(key, value){
-        console.log(value.title);
         text += "<li>"+value.title+"</li>";
       });
       text += "</ul>";
