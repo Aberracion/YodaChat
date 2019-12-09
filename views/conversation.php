@@ -17,10 +17,16 @@
      ?>
   </ul>
 </div>
-<div style="display:none" id="writing">Writing...</div>
-<form action="#" id="myForm">
-  <div class="form-group">
-    <input type="text" name="chat" id="chat" onkeyup="checkChat()"/>
-    <input class="btn btn-success btn-submit" type="button" value="Send!" id="submit" disabled/>
-  </div>
-</form>
+<div class="ml-4" style="display:none" id="writing">
+  <i>
+    Writing...
+  </i>
+</div>
+<div class="ml-4">
+  <form action="#" id="myForm">
+    <div class="form-group">
+      <input type="text" name="chat" id="chat" onkeyup="checkChat()"/>
+      <input class="btn btn-success btn-submit" type="button" value="Send!" id="submit" disabled/>
+    </div>
+  </form>
+</div>

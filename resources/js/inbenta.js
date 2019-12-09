@@ -17,6 +17,8 @@ function Authorization(){
     expiration = data.expiration;
     chatbotApiUrl = data.apis.chatbot;
     expires_in = data.expires_in;
+    console.log(expires_in);
+    setTimeout("accessToken = '';", expires_in*1000);
     iniConversation();
   }).catch(error => {
     console.log(error)
@@ -95,12 +97,18 @@ function sendMessage(){
       starWarsCharacters();
     }
     else{
-      saveSession(0,data.answers[0].messageList[0]);
-      $("#conversacion").append("<li><b>Yoda:</b> "+data.answers[0].messageList[0]+"</li>");
+      var message = "";
+      $.each(data.answers[0].messageList, function(key, value){
+        message += (message==""?value:"<br>"+value);
+      });
+      saveSession(0,message);
+      $("#conversacion").append("<li><b>Yoda:</b> "+message+"</li>");
       $("#writing").hide();
       $("#chat").val("");
     }
   }).catch(error => {
-    console.log(error)
+    console.log(error);
+    $("#writing").hide();
+    $("#chat").val("");
   });
 }
